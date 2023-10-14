@@ -1,12 +1,18 @@
 import React from 'react'
-import { Pressable, Text, View } from 'react-native'
-import {
-  NavigationProp,
-  ParamListBase,
-} from '@react-navigation/native'
+import { FlatList, View } from 'react-native'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import styles from './CardListStyles'
+import { useSelector } from 'react-redux'
+import { ICardItem, selectCardList } from '../../store/slices/cardSlice'
+import CardListItem from './CardListItem';
 
 interface ICardListScreenProps {
   navigation: NavigationProp<ParamListBase>
+}
+
+interface ICardItemFromFlatList {
+  index: number
+  item: ICardItem
 }
 
 /**
@@ -16,27 +22,30 @@ interface ICardListScreenProps {
  */
 const CardListScreen = (props: ICardListScreenProps) => {
   const { navigation } = props
+
+  const cardList = useSelector(selectCardList)
+
+  /**
+   * Обработчик нажатия на карточку
+   */
+  const onPressCard = () => {
+    navigation.navigate('CardDetail')
+  }
+
+  /**
+   * Экран со списком карточек
+   * @param {ICardItemFromFlatList} param
+   * @return {JSX.Element}
+   */
+  const renderCardItem = ({ item: cardItem, index }: ICardItemFromFlatList) => {
+    return (
+      <CardListItem key={index} {...cardItem} onPress={onPressCard} />
+    )
+  }
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-        paddingHorizontal: 20,
-      }}
-    >
-      <Pressable
-        style={{ borderWidth: 1, borderRadius: 12, paddingHorizontal: 8, paddingVertical: 8 }}
-        onPress={() => {
-          navigation.navigate('CardDetail')
-        }}
-      >
-        <Text>{`Label 1: `}</Text>
-        <Text>{`Label 2: `}</Text>
-        <Text>{`Label 3: `}</Text>
-        <Text>{`Label 4: `}</Text>
-        <Text>{`Label 5: `}</Text>
-        <Text>{`Last update: 0`}</Text>
-      </Pressable>
+    <View style={styles.container}>
+      <FlatList data={cardList} renderItem={renderCardItem} />
     </View>
   )
 }

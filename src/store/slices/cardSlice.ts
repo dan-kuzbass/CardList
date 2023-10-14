@@ -1,10 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { RootState } from '../store'
 
-export interface CardState {
-  cardList?: Array<any>
+export interface ICardItem {
+  label1: string
+  label2: string
+  label3: string
+  label4: string
+  label5: string
+  lastUpdated: number
 }
 
-const initialState: CardState = {}
+export interface CardState {
+  cardList?: Array<ICardItem>
+}
+
+const initialState: CardState = {
+  cardList: [
+    {
+      label1: 'fdf',
+      label2: 'dfd',
+      label3: 'asd',
+      label4: 'fff',
+      label5: 'fdfd',
+      lastUpdated: 1697291197281,
+    },
+  ],
+}
 
 export const cardSlice = createSlice({
   name: 'card',
@@ -12,3 +33,5 @@ export const cardSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {},
 })
+
+export const selectCardList = (state: RootState) => state.card.cardList

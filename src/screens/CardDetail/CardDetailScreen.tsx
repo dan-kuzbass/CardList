@@ -6,7 +6,7 @@ import { Text } from 'react-native'
  * @constructor
  */
 const CardDetailScreen = () => {
-  return <Text>CardDetail</Text>
+  return <Text></Text>
 }
 
 export default CardDetailScreen
