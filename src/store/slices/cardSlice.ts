@@ -1,6 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 import generateRandomString from '../../utils/generateRandomString'
+
+export type labelType = 'label1' | 'label2' | 'label3' | 'label4' | 'label5'
 
 export interface ICardItem {
   label1: string
@@ -21,6 +23,12 @@ interface IFetchCardListResponse {
   data: Array<ICardItem>
 }
 
+interface IChangeCardPayload {
+  index: number
+  label: labelType
+  value: string
+}
+
 const initialState: CardState = {}
 
 const getNewCards = (cardArrayLength: number) => {
@@ -38,37 +46,54 @@ const getNewCards = (cardArrayLength: number) => {
   return newCardList
 }
 
-export const fetchCardList = createAsyncThunk('cards/fetchCardList', async (_, { rejectWithValue }) => {
-  try {
-    const response: IFetchCardListResponse = await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ data: getNewCards(10) });
-      }, 1000);
-    });
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error);
-  }
-});
+export const fetchCardList = createAsyncThunk(
+  'cards/fetchCardList',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: IFetchCardListResponse = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ data: getNewCards(10) })
+        }, 1000)
+      })
+      return response.data
+    } catch (error: any) {
+      return rejectWithValue(error)
+    }
+  },
+)
 
-export const fetchMoreCardList = createAsyncThunk('cards/fetchMoreCardList', async (_, { rejectWithValue }) => {
-  try {
-    const response: IFetchCardListResponse = await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ data: getNewCards(5) });
-      }, 1000);
-    });
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error);
-  }
-});
-
+export const fetchMoreCardList = createAsyncThunk(
+  'cards/fetchMoreCardList',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: IFetchCardListResponse = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ data: getNewCards(5) })
+        }, 1000)
+      })
+      console.log('fdfd rs', response);
+      return response.data
+    } catch (error: any) {
+      console.log('fdfd e', error);
+      return rejectWithValue(error)
+    }
+  },
+)
 
 export const cardSlice = createSlice({
   name: 'card',
   initialState,
-  reducers: {},
+  reducers: {
+    changeCard: (state, action: PayloadAction<IChangeCardPayload>) => {
+      if (state.cardList && action.payload.index !== -1) {
+        state.cardList[action.payload.index] = {
+          ...state.cardList[action.payload.index],
+          [action.payload.label]: action.payload.value,
+          lastUpdated: Date.now(),
+        }
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCardList.pending, (state) => {
       state.isLoading = true
@@ -91,7 +116,11 @@ export const cardSlice = createSlice({
 export const selectCardList = (state: RootState) => state.card.cardList
 
 // eslint-disable-next-line require-jsdoc
-export const selectIsLoadingCardList = (state: RootState) => state.card.isLoading
+export const selectIsLoadingCardList = (state: RootState) =>
+  state.card.isLoading
 
 // eslint-disable-next-line require-jsdoc
-export const selectIsFetchingCardList = (state: RootState) => state.card.isFetching
+export const selectIsFetchingCardList = (state: RootState) =>
+  state.card.isFetching
+
+export const { changeCard } = cardSlice.actions

@@ -1,7 +1,9 @@
-import React from 'react'
-import { Pressable, StyleSheet, Text } from 'react-native';
-import styles from './CardListScreenStyles';
-import { ICardItem } from '../../store/slices/cardSlice';
+import React, { useCallback, useEffect, useState } from "react";
+import { AppState, Pressable, StyleSheet, Text } from "react-native";
+import styles from './CardListScreenStyles'
+import { ICardItem } from '../../store/slices/cardSlice'
+import useTimeout from '../../utils/useTimeout'
+import startTimerLastUpdated from "../../utils/startTimerLastUpdated";
 
 interface ICardListItem extends ICardItem {
   onPress: () => void
@@ -12,20 +14,40 @@ interface ICardListItem extends ICardItem {
  * @param {ICardListItem} props
  * @constructor
  */
-const CardListItem = ({onPress, label1, label2, label3, label4, label5, lastUpdated}: ICardListItem) => {
-  return <Pressable
-    style={({ pressed }) =>
-      StyleSheet.flatten([styles.cardContainer, pressed && styles.opacity])
+const CardListItem = ({
+  onPress,
+  label1,
+  label2,
+  label3,
+  label4,
+  label5,
+  lastUpdated,
+}: ICardListItem) => {
+  const { time, onStart, onClose } = useTimeout()
+
+  useEffect(() => {
+    let returnCallback = () => {}
+    if (lastUpdated && lastUpdated !== 0) {
+      returnCallback = startTimerLastUpdated(lastUpdated, onStart, onClose)
     }
-    onPress={onPress}
-  >
-    <Text>{`Label 1: ${label1}`}</Text>
-    <Text>{`Label 2: ${label2}`}</Text>
-    <Text>{`Label 3: ${label3}`}</Text>
-    <Text>{`Label 4: ${label4}`}</Text>
-    <Text>{`Label 5: ${label5}`}</Text>
-    <Text>{`Last update: ${lastUpdated}`}</Text>
-  </Pressable>
+    return returnCallback
+  }, [lastUpdated])
+
+  return (
+    <Pressable
+      style={({ pressed }) =>
+        StyleSheet.flatten([styles.cardContainer, pressed && styles.opacity])
+      }
+      onPress={onPress}
+    >
+      <Text>{`Label 1: ${label1}`}</Text>
+      <Text>{`Label 2: ${label2}`}</Text>
+      <Text>{`Label 3: ${label3}`}</Text>
+      <Text>{`Label 4: ${label4}`}</Text>
+      <Text>{`Label 5: ${label5}`}</Text>
+      <Text>{`Last update: ${time}`}</Text>
+    </Pressable>
+  )
 }
 
 export default CardListItem

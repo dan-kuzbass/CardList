@@ -13,14 +13,19 @@ import {
 } from 'redux-persist'
 
 import { rootReducer } from './rootReducer'
+import { cardSlice } from './slices/cardSlice'
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: [],
+  whitelist: [cardSlice.name],
 }
 
-const makeMiddleware = (getDefaultMiddleware: (arg0: { serializableCheck: { ignoredActions: any[] } }) => any[]) => {
+const makeMiddleware = (
+  getDefaultMiddleware: (arg0: {
+    serializableCheck: { ignoredActions: any[] }
+  }) => any[],
+) => {
   const newMiddleware = getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

@@ -12,12 +12,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import styles from './CardListScreenStyles'
 import {
-  fetchCardList, fetchMoreCardList,
+  fetchCardList,
+  fetchMoreCardList,
   ICardItem,
   selectCardList,
   selectIsFetchingCardList,
-  selectIsLoadingCardList
-} from "../../store/slices/cardSlice";
+  selectIsLoadingCardList,
+} from '../../store/slices/cardSlice'
 import CardListItem from './CardListItem'
 
 interface ICardListScreenProps {
@@ -46,9 +47,11 @@ const CardListScreen = (props: ICardListScreenProps) => {
 
   /**
    * Обработчик нажатия на карточку
+   * @param {ICardItem} cardItem
+   * @param {number} index - порядковый номер карточки (начиная с 0)
    */
-  const onPressCard = () => {
-    navigation.navigate('CardDetail')
+  const onPressCard = (cardItem: ICardItem, index: number) => {
+    navigation.navigate('CardDetail', { cardItem, index })
   }
 
   /**
@@ -57,17 +60,39 @@ const CardListScreen = (props: ICardListScreenProps) => {
    * @return {JSX.Element}
    */
   const renderCardItem = ({ item: cardItem, index }: ICardItemFromFlatList) => {
-    return <CardListItem key={index} {...cardItem} onPress={onPressCard} />
+    return (
+      <CardListItem
+        key={index}
+        {...cardItem}
+        onPress={() => {
+          onPressCard(cardItem, index)
+        }}
+      />
+    )
   }
 
   useEffect(() => {
-    onRefresh()
-  }, [])
+    if (!cardList?.length) {
+      onLoad()
+    }
+  }, [cardList?.length])
 
-  const onRefresh = () => {
+  /**
+   * Загрузить новые 10 карточек (сбросив старые)
+   */
+  const onLoad = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     dispatch(fetchCardList())
+  }
+
+  /**
+   * Загрузить следующие 5 карточек
+   */
+  const onLoadMore = () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    dispatch(fetchMoreCardList())
   }
 
   return (
@@ -80,20 +105,19 @@ const CardListScreen = (props: ICardListScreenProps) => {
           contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
           data={cardList}
           renderItem={renderCardItem}
+          maxToRenderPerBatch={100}
           refreshControl={
-            onRefresh && (
+            onLoad && (
               <RefreshControl
                 title={'Загрузка данных...'}
-                onRefresh={onRefresh}
+                onRefresh={onLoad}
                 refreshing={!!isLoadingCardList}
               />
             )
           }
           onEndReached={() => {
             if (!isFetchingCardList) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              dispatch(fetchMoreCardList())
+              onLoadMore()
             }
           }}
           onEndReachedThreshold={0.3}
