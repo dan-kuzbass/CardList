@@ -1,33 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 import generateRandomString from '../../utils/generateRandomString'
-
-export type labelType = 'label1' | 'label2' | 'label3' | 'label4' | 'label5'
-
-export interface ICardItem {
-  label1: string
-  label2: string
-  label3: string
-  label4: string
-  label5: string
-  lastUpdated: number
-}
-
-export interface CardState {
-  cardList?: Array<ICardItem>
-  isLoading?: boolean
-  isFetching?: boolean
-}
-
-interface IFetchCardListResponse {
-  data: Array<ICardItem>
-}
-
-interface IChangeCardPayload {
-  index: number
-  label: labelType
-  value: string
-}
+import { CardState, IChangeCardPayload, IFetchCardListResponse } from "./cardSliceTypes";
 
 const initialState: CardState = {}
 

@@ -14,12 +14,12 @@ import styles from './CardListScreenStyles'
 import {
   fetchCardList,
   fetchMoreCardList,
-  ICardItem,
   selectCardList,
   selectIsFetchingCardList,
   selectIsLoadingCardList,
 } from '../../store/slices/cardSlice'
 import CardListItem from './CardListItem'
+import { ICardItem } from '../../store/slices/cardSliceTypes'
 
 interface ICardListScreenProps {
   navigation: NavigationProp<ParamListBase>
@@ -124,7 +124,10 @@ const CardListScreen = (props: ICardListScreenProps) => {
           ListFooterComponent={() => {
             if (isFetchingCardList) {
               return (
-                <ActivityIndicator size="large" style={styles.fetchMoreLoader} />
+                <ActivityIndicator
+                  size="large"
+                  style={styles.fetchMoreLoader}
+                />
               )
             }
             return <></>

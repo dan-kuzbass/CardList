@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Pressable, StyleSheet, Text } from 'react-native'
 
 import styles from './CardListScreenStyles'
-import { ICardItem } from '../../store/slices/cardSlice'
+import { ICardItem } from '../../store/slices/cardSliceTypes'
 import useTimeout from '../../hooks/useTimeout'
 import startTimerLastUpdated from '../../utils/startTimerLastUpdated'
 

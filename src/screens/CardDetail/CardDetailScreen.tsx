@@ -3,15 +3,11 @@ import { Text, TextInput, View } from 'react-native'
 import { debounce } from 'lodash'
 
 import styles from './CardDetailScreenStyles'
-import {
-  changeCard,
-  ICardItem,
-  labelType,
-  selectCardList,
-} from '../../store/slices/cardSlice'
+import { changeCard, selectCardList } from '../../store/slices/cardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import useTimeout from '../../hooks/useTimeout'
 import startTimerLastUpdated from '../../utils/startTimerLastUpdated'
+import { ICardItem, labelType } from '../../store/slices/cardSliceTypes'
 
 interface ICardDetailProps {
   route?: { params?: { index: number } }
