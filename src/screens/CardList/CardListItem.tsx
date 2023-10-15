@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { AppState, Pressable, StyleSheet, Text } from "react-native";
+import React, { useEffect } from 'react'
+import { Pressable, StyleSheet, Text } from 'react-native'
+
 import styles from './CardListScreenStyles'
 import { ICardItem } from '../../store/slices/cardSlice'
-import useTimeout from '../../utils/useTimeout'
-import startTimerLastUpdated from "../../utils/startTimerLastUpdated";
+import useTimeout from '../../hooks/useTimeout'
+import startTimerLastUpdated from '../../utils/startTimerLastUpdated'
 
 interface ICardListItem extends ICardItem {
   onPress: () => void
@@ -26,6 +27,7 @@ const CardListItem = ({
   const { time, onStart, onClose } = useTimeout()
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     let returnCallback = () => {}
     if (lastUpdated && lastUpdated !== 0) {
       returnCallback = startTimerLastUpdated(lastUpdated, onStart, onClose)

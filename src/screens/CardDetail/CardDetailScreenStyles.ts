@@ -10,7 +10,7 @@ interface ICardListStyle {
 const styles: ICardListStyle = StyleSheet.create({
   container: { paddingHorizontal: 20, paddingTop: 16 },
   inputContainer: { marginVertical: 16 },
-  input: { borderWidth: 1, marginTop: 8, height: 30 },
+  input: { borderWidth: 1, marginTop: 8, height: 60 },
 })
 
 export default styles

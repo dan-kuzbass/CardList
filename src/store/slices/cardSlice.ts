@@ -71,10 +71,8 @@ export const fetchMoreCardList = createAsyncThunk(
           resolve({ data: getNewCards(5) })
         }, 1000)
       })
-      console.log('fdfd rs', response);
       return response.data
     } catch (error: any) {
-      console.log('fdfd e', error);
       return rejectWithValue(error)
     }
   },
@@ -112,14 +110,11 @@ export const cardSlice = createSlice({
   },
 })
 
-// eslint-disable-next-line require-jsdoc
 export const selectCardList = (state: RootState) => state.card.cardList
 
-// eslint-disable-next-line require-jsdoc
 export const selectIsLoadingCardList = (state: RootState) =>
   state.card.isLoading
 
-// eslint-disable-next-line require-jsdoc
 export const selectIsFetchingCardList = (state: RootState) =>
   state.card.isFetching
 

@@ -31,7 +31,7 @@ module.exports = {
           FunctionDeclaration: true,
           MethodDefinition: false,
           ClassDeclaration: true,
-          ArrowFunctionExpression: true,
+          ArrowFunctionExpression: false,
           FunctionExpression: true,
         },
       },

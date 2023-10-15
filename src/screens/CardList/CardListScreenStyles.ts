@@ -5,6 +5,7 @@ interface ICardListStyle {
   container: RNStyleType
   cardContainer: RNStyleType
   labelRow: RNStyleType
+  fetchMoreLoader: RNStyleType
   opacity: RNStyleType
 }
 
@@ -23,6 +24,7 @@ const styles: ICardListStyle = StyleSheet.create({
     marginVertical: 4,
   },
   labelRow: { flexDirection: 'row', alignItems: 'center' },
+  fetchMoreLoader: { marginTop: 16 },
   opacity: { opacity: 0.4 },
 })
 

@@ -124,7 +124,7 @@ const CardListScreen = (props: ICardListScreenProps) => {
           ListFooterComponent={() => {
             if (isFetchingCardList) {
               return (
-                <ActivityIndicator size="large" style={{ marginTop: 16 }} />
+                <ActivityIndicator size="large" style={styles.fetchMoreLoader} />
               )
             }
             return <></>

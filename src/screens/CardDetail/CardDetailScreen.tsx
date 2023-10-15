@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { AppState, Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 import { debounce } from 'lodash'
 
 import styles from './CardDetailScreenStyles'
@@ -10,7 +10,7 @@ import {
   selectCardList,
 } from '../../store/slices/cardSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import useTimeout from '../../utils/useTimeout'
+import useTimeout from '../../hooks/useTimeout'
 import startTimerLastUpdated from '../../utils/startTimerLastUpdated'
 
 interface ICardDetailProps {
@@ -50,6 +50,7 @@ const CardDetailScreen = ({ route }: ICardDetailProps) => {
   const { time, onStart, onClose } = useTimeout()
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     let returnCallback = () => {}
     if (lastUpdated && lastUpdated !== 0) {
       returnCallback = startTimerLastUpdated(lastUpdated, onStart, onClose)
@@ -58,7 +59,6 @@ const CardDetailScreen = ({ route }: ICardDetailProps) => {
   }, [lastUpdated])
 
   const onChangeLabel = (label: labelType, value: string) => {
-    console.log('fdfd label value', label, value)
     dispatch(changeCard({ index: route?.params?.index ?? -1, label, value }))
   }
 
