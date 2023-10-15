@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pressable, StyleSheet, Text } from 'react-native';
-import styles from './CardListStyles';
+import styles from './CardListScreenStyles';
 import { ICardItem } from '../../store/slices/cardSlice';
 
 interface ICardListItem extends ICardItem {
