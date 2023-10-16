@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { memo, useEffect } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native'
 
 import styles from './CardListScreenStyles'
@@ -7,7 +7,8 @@ import useTimeout from '../../hooks/useTimeout'
 import startTimerLastUpdated from '../../utils/startTimerLastUpdated'
 
 interface ICardListItem extends ICardItem {
-  onPress: () => void
+  onPress: (cardIndex: number) => void
+  cardIndex: number
 }
 
 /**
@@ -23,6 +24,7 @@ const CardListItem = ({
   label4,
   label5,
   lastUpdated,
+  cardIndex,
 }: ICardListItem) => {
   const { time, onStart, onClose } = useTimeout()
 
@@ -35,12 +37,16 @@ const CardListItem = ({
     return returnCallback
   }, [lastUpdated])
 
+  const onPressCard = () => {
+    onPress(cardIndex)
+  }
+
   return (
     <Pressable
       style={({ pressed }) =>
         StyleSheet.flatten([styles.cardContainer, pressed && styles.opacity])
       }
-      onPress={onPress}
+      onPress={onPressCard}
     >
       <Text>{`Label 1: ${label1}`}</Text>
       <Text>{`Label 2: ${label2}`}</Text>
@@ -52,4 +58,6 @@ const CardListItem = ({
   )
 }
 
-export default CardListItem
+export default memo(CardListItem, (prevProps, nextProps) => {
+  return prevProps.lastUpdated === nextProps.lastUpdated
+})

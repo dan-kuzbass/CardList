@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   ActivityIndicator,
@@ -47,29 +47,25 @@ const CardListScreen = (props: ICardListScreenProps) => {
 
   /**
    * Обработчик нажатия на карточку
-   * @param {ICardItem} cardItem
-   * @param {number} index - порядковый номер карточки (начиная с 0)
+   * @param {number} cardIndex - порядковый номер карточки (начиная с 0)
    */
-  const onPressCard = (cardItem: ICardItem, index: number) => {
-    navigation.navigate('CardDetail', { cardItem, index })
-  }
+  const onPressCard = useCallback((cardIndex: number) => {
+    navigation.navigate('CardDetail', { cardIndex })
+  }, [])
 
   /**
    * Экран со списком карточек
    * @param {ICardItemFromFlatList} param
    * @return {JSX.Element}
    */
-  const renderCardItem = ({ item: cardItem, index }: ICardItemFromFlatList) => {
-    return (
-      <CardListItem
-        key={index}
-        {...cardItem}
-        onPress={() => {
-          onPressCard(cardItem, index)
-        }}
-      />
-    )
-  }
+  const renderCardItem = useCallback(
+    ({ item: cardItem, index }: ICardItemFromFlatList) => {
+      return (
+        <CardListItem {...cardItem} cardIndex={index} onPress={onPressCard} />
+      )
+    },
+    [],
+  )
 
   useEffect(() => {
     if (!cardList?.length) {
@@ -106,6 +102,7 @@ const CardListScreen = (props: ICardListScreenProps) => {
           data={cardList}
           renderItem={renderCardItem}
           maxToRenderPerBatch={100}
+          initialNumToRender={10}
           refreshControl={
             onLoad && (
               <RefreshControl

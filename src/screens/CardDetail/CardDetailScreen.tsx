@@ -10,7 +10,7 @@ import startTimerLastUpdated from '../../utils/startTimerLastUpdated'
 import { ICardItem, labelType } from '../../store/slices/cardSliceTypes'
 
 interface ICardDetailProps {
-  route?: { params?: { index: number } }
+  route?: { params?: { cardIndex: number } }
 }
 
 const mockCard = {
@@ -27,7 +27,7 @@ const mockCard = {
  * @constructor
  */
 const CardDetailScreen = ({ route }: ICardDetailProps) => {
-  const cardIndex = route?.params?.index ?? -1
+  const cardIndex = route?.params?.cardIndex ?? -1
   const cardItem: ICardItem =
     cardIndex !== -1
       ? useSelector(selectCardList)?.[cardIndex] ?? mockCard
@@ -55,7 +55,7 @@ const CardDetailScreen = ({ route }: ICardDetailProps) => {
   }, [lastUpdated])
 
   const onChangeLabel = (label: labelType, value: string) => {
-    dispatch(changeCard({ index: route?.params?.index ?? -1, label, value }))
+    dispatch(changeCard({ index: route?.params?.cardIndex ?? -1, label, value }))
   }
 
   const onChangeDebounceTextLabel = useCallback(
